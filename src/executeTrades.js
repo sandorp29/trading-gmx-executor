@@ -59,8 +59,8 @@ const executeTrades = async ({tradeDataFile, leverage}) => {
   console.log("SIGNAL:", signal);
 
   // TODO Configure usd token to account for funding rates
-  // if were shorting, we just pick the cheapest funding rate
-  // if were longing, we pick whatever we shorted with
+  // if were flipping long->short, we just pick the cheapest funding rate
+  // if were flipping short->long, we pick whatever we shorted with
   const usdToken = "USDC";
   // const usdToken = (signal.startsWith("OPEN SHORT")) ? await getCheapestBorrow() : positions.shortSymbol;
   const [ USD_DECIMALS, USD_ADDRESS ] = {
@@ -113,7 +113,7 @@ const executeTrades = async ({tradeDataFile, leverage}) => {
       throw new Error("Long not closed");
     }
 
-    // TODO use uniswap/1inch
+    // TODO use uniswap/1inch - this currently uses GMX's builtin swap router
     // got back eth... swap to USD for next trade
     let balances = await getBalances(SIGNER.address);
     console.log("BALANCES BEFORE SWAP: ", balances);
